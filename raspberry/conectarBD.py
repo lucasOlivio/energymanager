@@ -1,13 +1,13 @@
 #!/usr/bin/python
+import psycopg2
 
 class Conect:
-    def __init__(self):
-        import psycopg2
-
+    # Initialize the database object and the cursor
+    def __init__(self: object):
         self.hostname = '192.168.15.15'
         self.username = 'postgres'
-        self.password = 'lukinhasoli23'
-        self.database = 'ENERGY_MANAGER'
+        self.password = '####'
+        self.database = '####'
         self.myConnection = psycopg2.connect(host=self.hostname, user=self.username, password=self.password, dbname=self.database)
 
         self.cur = self.myConnection.cursor()
@@ -17,24 +17,10 @@ class Conect:
         self.myConnection.commit()
 
 
-    # Simple routine to run a query on a database and print the results:
-    def select( self, column, table, condition = "TRUE" ) :
-
-        #listParameters = []
-
-        #listColumns = column.split(",")
-
-        #listParameters.append(clm for clm in listColumns)
-
-        #phColumns = '%s'
-        #phsColumns = ', '.join(phColumns for unused in listColumns)
-
-        #phConditions = '%s'
-        #phsConditions = ' '.join(phConditions for unused in listConditions)
+    # Run a query on a database and print the results:
+    def select(self: object, column: object, table: object, condition = "TRUE" ) :
 
         query = 'SELECT %s FROM %s WHERE %s' %(column, table, condition)
-
-        #print(query)
 
         self.cur.execute(query)
 
@@ -45,7 +31,8 @@ class Conect:
 
         return results
 
-    def insert(self, table, columns, values):
+    # Run a query on a database and insert the values:
+    def insert(self: object, table: object, columns: object, values: object):
 
         listValues = values.split(",")
         listColumns = columns.split(",")
@@ -59,12 +46,11 @@ class Conect:
         
         query= query+' (%s);' % phsValues
 
-        #print(query)
-        resp = self.cur.execute(query, listValues)
+        self.cur.execute(query, listValues)
         self.myConnection.commit()
 
         return ''
 
-
-    def closeCon(self):
+    # Closes the connection with db
+    def closeCon(self: object):
         self.myConnection.close()

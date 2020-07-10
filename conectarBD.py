@@ -1,42 +1,42 @@
-#!/usr/bin/python
+import psycopg2
 
 class Conect:
-	def __init__(self):
-		import psycopg2
+    # Initialize the database object and the cursor
+    def __init__(self: object):
+        self.hostname = '10.0.0.1'
+        self.username = 'pi'
+        self.password = '####'
+        self.database = '####'
+        self.myConnection = psycopg2.connect(host=self.hostname, user=self.username, password=self.password, dbname=self.database)
 
-		self.hostname = '10.0.0.1'
-		self.username = 'pi'
-		self.password = 'currentM'
-		self.database = 'ENERGY_MANAGER'
-		self.myConnection = psycopg2.connect(host=self.hostname, user=self.username, password=self.password, dbname=self.database)
+        self.cur = self.myConnection.cursor()
 
-		self.cur = self.myConnection.cursor()
+    # Run a query on a database and print the results:
+    def select(self: object, column: str, table: str, condition = "TRUE"):
 
-	# Simple routine to run a query on a database and print the results:
-	def select( self, column, table, condition = "TRUE") :
+        query = 'SELECT %s FROM %s WHERE %s' %(column, table, condition)
 
-		query = 'SELECT %s FROM %s WHERE %s' %(column, table, condition)
+        self.cur.execute(query)
 
-		self.cur.execute(query)
+        results = []
 
-		results = []
+        for i in self.cur.fetchall() :
+            results.append(i)
 
-		for i in self.cur.fetchall() :
-			results.append(i)
+        return results
 
-		return results
+    # Run a query on a database and update:
+    def update(self: object, table: str, column: str, condition = "FALSE") :
 
-	# Simple routine to run a query on a database and update:
-	def update( self, table, column, condition = "FALSE") :
+        query = 'UPDATE %s SET %s WHERE %s' %(table, column, condition)
 
-		query = 'UPDATE %s SET %s WHERE %s' %(table, column, condition)
+        self.cur.execute(query)
 
-		results = self.cur.execute(query)
+        self.myConnection.commit()
 
-		self.myConnection.commit()
+        return self.cur.rowcount
 
-		return self.cur.rowcount
-
-	def closeCon(self):
-		self.cur.close()
-		self.myConnection.close()
+    # Closes the connection with db
+    def closeCon(self: object):
+        self.cur.close()
+        self.myConnection.close()

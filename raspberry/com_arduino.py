@@ -24,8 +24,6 @@ sock.setblocking(0)
 
 sock.bind((UDP_IP, UDP_PORT))
 
-#sock.sendto(GC.encode(), (UDP_ARDUINO, UDP_PORT))
-
 try:
 	while True:
 
