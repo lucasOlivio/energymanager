@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id="loader"></div>
+<div class="card text-center" style="margin-top: 0px">
+    <div class="card-header">
+      <h4>Gerenciador de energia</h4>
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" id="list-tab" href="#tabList" role="tab" aria-controls="tabList" aria-selected="true"><i class="fas fa-list"></i> Detalhes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" id="graph-tab" href="#tabGraph" role="tab" aria-controls="tabGraph" aria-selected="false"><i class="fas fa-chart-area"></i> Gráfico de consumo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" id="cad-tab" href="#tabCad" role="tab" aria-controls="tabCad" aria-selected="false"><i class="fas fa-book"></i> Cadastro</a>
+        </li>
+      </ul>
+    </div>
+    <div class="animate-bottom card-body" id="myDiv" style="display: none">
+      	<div class="tab-content" id="myTabContent">
+      		<div class="tab-pane fade show active" id="tabList" role="tabpanel" aria-labelledby="list-tab">
+				<div class="row">
+					<div class="col-sm-2">
+						<select class="browser-default" id="mes">
+							{{optsMes}}
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<select class="browser-default" id="ano">
+							{{optsAno}}
+						</select>	
+					</div>
+					<div class="col-sm-2">
+						<select class="browser-default" id="tensao">
+							<option value="110">110 V</option>
+							<option value="127">127 V</option>
+							<option value="220">220 V</option>
+							<option value="250">250 V</option>
+						</select>	
+					</div>
+					<div class="col-sm-1" style="padding: 0px;position: relative;">
+						<a style="position: absolute;top: 50%;transform: translate(-100%,-52%);" id="buscarTb" class="btn-small btn-floating waves-effect waves-light" href="#"><i class="fas fa-search"></i></a>
+					</div>
+			    </div>
+				<div class="row">
+					<div class="col-sm-12">
+						<table class="table table-striped table-hover">
+							<thead class="thead-dark">
+								<tr style="font-size: 20px">
+									<th style="width: 5%">
+										#
+									</th>
+									<th style="width: 26%">
+										Local
+									</th>
+									<th style="width: 18%">
+										Consumo do mês*<br>&#931(&#916A)
+									</th>
+									<th style="width: 18%">
+										Consumo do mês*<br>((&#931(&#916A))*U)/1000
+									</th>
+									<th style="width: 12%">
+										Comparação <br/><p id="thMes" style="margin: 0px">{{thMes}}</p>
+									</th>
+									<th style="width: 11%">
+										Participação locais
+									</th>
+								</tr>
+							</thead>
+							<tbody style="font-size: 25px" id="tbodyDetalhes">
+							</tbody>
+						</table>
+						<p style="text-align: left">*Até dia {{thDia}}</p>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tabGraph" role="tabpanel" aria-labelledby="graph-tab">
+				<div class="row">
+					<div class="col-sm-4">
+						<h4>Filtros</h4>
+						<div class="input-field col s12 m6">
+				          <input placeholder="DE" class="calendario" type="text" name="de" id="de" class="validate"/>
+				        </div>
+				        <div class="input-field col s12 m6">
+				          <input placeholder="ATÉ" class="calendario" type="text" name="ate" id="ate" class="validate"/>
+				        </div>
+				        <div class="col s12">
+						  <select class="browser-default" id="frequencia" style="margin-bottom: 14px">
+						    <option value="1">Dia</option>
+						    <option value="2">Hora</option>
+						  </select>
+						</div>
+						<div class="col s12">
+							<select class="browser-default" id="tensaoGraph">
+								<option value="110">110 V</option>
+								<option value="127">127 V</option>
+								<option value="220">220 V</option>
+								<option value="250">250 V</option>
+							</select>
+						</div>
+				        <a id="buscarGraph" style="margin-top: 5px" class="btn waves-effect waves-light" href="#">Buscar <i class="fas fa-search"></i></a>
+					</div>
+					<div class="col-sm-8">
+						<canvas id="canvas" width="200" height="100"></canvas>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tabCad" role="tabpanel" aria-labelledby="cad-tab">
+				<div class="row">
+					<div class="col-sm-6">
+						<table class="table table-striped table-hover">
+							<thead class="thead-dark">
+								<tr style="font-size: 20px">
+									<th>
+										#
+									</th>
+									<th>
+										IP
+									</th>
+									<th>
+										Local
+									</th>
+									<th>
+										Status
+									</th>
+								</tr>
+							</thead>
+							<tbody style="font-size: 25px; cursor: pointer;" id="tbodyCad">
+							</tbody>
+						</table>
+					</div>
+					<div class="col-sm-6">
+						<h4>Cadastro de medidor</h4>
+						<input id="idLocal" type="hidden">
+						<div class="input-field col s12">
+				          <input id="local" type="text" class="validate">
+				          <label for="local">Local</label>
+				        </div>
+				        <a id="salvar" class="btn waves-effect waves-light green" href="#">Salvar <i class="fas fa-cloud-upload-alt"></i></a>
+				        <a id="io" class="btn waves-effect waves-light blue" href="#">Ativar/Inativar <i class="fas fa-power-off"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
